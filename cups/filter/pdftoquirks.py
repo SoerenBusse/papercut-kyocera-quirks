@@ -40,7 +40,7 @@ for option in raw_options.split():
 # Duplex
 duplex_enabled = False
 if "duplex" in options and (
-        options["duplex"].lower() == "duplextumble" or options["duplex"].lower() == "duplexnotumple"):
+        options["duplex"].lower() == "duplextumble" or options["duplex"].lower() == "duplexnotumble"):
     duplex_enabled = True
 
 # Check for gray value, to accept any other color code like RGB or CMYK
