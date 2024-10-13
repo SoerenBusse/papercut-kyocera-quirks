@@ -62,8 +62,8 @@ logger.info(f"Parsed parameters from IPP: Duplex: {duplex_enabled}, Gray: {gray}
 sys.stdout.write("\x1B%-12345X@PJL\r\n")
 
 # Write Duplex Value. We can ignore the bindung here. PaperCut doesn't care for analysis
-sys.stdout.write(f"@PJL SET DUPLEX={"ON" if duplex_enabled else "OFF"}\r\n")
-sys.stdout.write(f"@PJL SET RENDERMODE={"GRAYSCALE" if gray else "COLOR"}\r\n")
+sys.stdout.write(f"@PJL SET DUPLEX={'ON' if duplex_enabled else 'OFF'}\r\n")
+sys.stdout.write(f"@PJL SET RENDERMODE={'GRAYSCALE' if gray else 'COLOR'}\r\n")
 sys.stdout.write(f"@PJL SET PAPER={page_size}\r\n")
 sys.stdout.write(f"@PJL SET COPIES={copy_count}\r\n")
 
