@@ -46,7 +46,7 @@ if "duplex" in options and (
 # Check for gray value, to accept any other color code like RGB or CMYK
 # Add american and british spelling just to be sure ;)
 gray = False
-if "colormodel" in options and options["colormodel"].lower() == "gray" or options["colormodel"].lower() == "grey":
+if "colormodel" in options and (options["colormodel"].lower() == "gray" or options["colormodel"].lower() == "grey"):
     gray = True
 
 # Default Media Size
