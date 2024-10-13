@@ -4,6 +4,32 @@ Background is a broken and very slow postscript stack of the Kyocera printers, w
 
 Documentation of the bugs and challenges is in progress.
 
+## Installation
+```
+# Clone repository
+git clone https://github.com/SoerenBusse/papercut-kyocera-quirks.git
+
+# Asumming you've PaperCut installed to /home/papercut
+mkdir /home/papercut/papercut-kyocera-quirks
+
+# Copy files
+cp papercut-kyocera-quirks/cups/filter/pdftoquirks.py /usr/lib/cups/filter/pdftoquirks
+chmod +x /usr/lib/cups/filter/pdftoquirks
+
+cp papercut-kyocera-quirks/cups/redirect/quirksredirect.py /home/papercut/papercut-kyocera-quirks/quirksredirect
+chmod +x /home/papercut/papercut-kyocera-quirks/quirksredirect
+```
+
+### Setup
+Configuring the redirect command inside `print-provider.conf`
+```
+RedirectCommand=/home/papercut/papercut-kyocera-quirks/quirksredirect %server% %printer% %docname% %username% %spoolfile% false > /dev/null 2>&1
+```
+
+#### PPD File
+The PPD is generated when setting up the printer as an IPP Everywhere device. Then the `cupsfilter2` is modified to include the quirks filter.
+Setup a printer using the modified IPP-Everywhere PPD file
+
 ## Challenges
 ### Big Postscript files with slow Kyocera Postscript interpreter
 TODO
@@ -96,5 +122,5 @@ This wraps the original `lp` call, but before reads the PJL header from the spoo
 Additionally, it removes the PJL header, because of [Kyocera handling coexistence](#Kyocera handling coexistence of parameters in Postscript/PJL and IPP)
 
 ```
-./quirksredirect [server] [queue] [job-name] [spool-file] [debug
+./quirksredirect [server] [queue] [job-name] [username] [spool-file] [debug]
 ```

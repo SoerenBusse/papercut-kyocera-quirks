@@ -65,15 +65,16 @@ logger.addHandler(consoleHandler)
 logger.setLevel(logging.INFO)
 
 arg_count = len(sys.argv)
-if arg_count != 6:
-    logger.error(f"{sys.argv[0]} [server] [queue] [job-name] [spool-file] [debug]")
+if arg_count != 7:
+    logger.error(f"{sys.argv[0]} [server] [queue] [job-name] [username] [spool-file] [debug]")
     exit(1)
 
 server = sys.argv[1]
 queue = sys.argv[2]
 job_name = sys.argv[3]
-spool_file = Path(sys.argv[4])
-debug = sys.argv[5]
+user_name = sys.argv[4]
+spool_file = Path(sys.argv[5])
+debug = sys.argv[6]
 
 # Enable debug mode
 if debug.lower() == "true":
@@ -150,7 +151,14 @@ with open(spool_file, "rb") as spool:
     logger.debug(f"Renamed quirks file without header to {spool_file}")
 
 logger.debug("Run lp command")
-arguments = ["lp", "-h", server, "-n", str(original_copy_count), "-d", queue, "-t", job_name, "-o", "raw",
+arguments = ["lp",
+             "-h", server,
+             "-n", str(original_copy_count),
+             "-d", queue,
+             "-t", job_name,
+             "-U", user_name,
+             "-o",
+             "raw",
              spool_file.absolute().as_posix()]
 
 if original_options is not None:
