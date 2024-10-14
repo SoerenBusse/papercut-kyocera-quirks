@@ -5,8 +5,10 @@ CUPS FILTER
 - Add cups options as PJL comment
 """
 import logging
+import os
 import shutil
 import sys
+import time
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG, encoding="utf-8")
@@ -54,7 +56,14 @@ page_size = "A4"
 if "pagesize" in options:
     page_size = options["pagesize"]
 
-logger.info(f"Parsed parameters from IPP: Duplex: {duplex_enabled}, Gray: {gray}, PageSize: {page_size}")
+# PPD environment variable is mandatory and should be set by CUPS context
+if "PPD" not in os.environ:
+    logger.error("Environment variable PPD not found")
+    exit(1)
+
+ppd = os.environ["PPD"]
+
+logger.info(f"Parsed parameters from IPP: Duplex: {duplex_enabled}, Gray: {gray}, PageSize: {page_size}, PPD: {ppd}")
 
 # Write PJL Header
 # PJL Escape Sequence
@@ -67,8 +76,11 @@ sys.stdout.write(f"@PJL SET RENDERMODE={'GRAYSCALE' if gray else 'COLOR'}\r\n")
 sys.stdout.write(f"@PJL SET PAPER={page_size}\r\n")
 sys.stdout.write(f"@PJL SET COPIES={copy_count}\r\n")
 
-# Options als Comment einfügen
+# Write options as comment
 sys.stdout.write(f"@PJL COMMENT CUPS_OPTIONS=\"{raw_options}\"\r\n")
+
+# Write PPD as comment
+sys.stdout.write(f"@PJL COMMENT PPD=\"{ppd}\"\r\n")
 
 # Tell printer that PDF follows
 # We're copying the inconsistency spaces from CUPS. Don't know if its important ;)
