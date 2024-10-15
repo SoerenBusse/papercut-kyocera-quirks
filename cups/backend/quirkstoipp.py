@@ -8,6 +8,7 @@ import logging
 import os
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -232,6 +233,25 @@ logger.debug(f"New environment variables: {new_environment}")
 # p: path variable
 # e: envionment
 ipp_backend = cups_server_bin.joinpath("backend").joinpath("ipp").absolute().as_posix()
-logger.debug(f"Call ipp backend at {ipp_backend} with Device-URI {child_device_uri}")
-os.execlpe(ipp_backend, ipp_backend, job_id, username, job_name, str(new_copy_count), new_options,
-           destination_spool.absolute().as_posix(), new_environment)
+
+arguments = [
+    ipp_backend,
+    job_id, username,
+    job_name,
+    str(new_copy_count),
+    new_options,
+    destination_spool.absolute().as_posix()
+]
+
+try:
+    logger.debug(f"Call ipp backend at {ipp_backend} with Device-URI {child_device_uri}. Arguments: {arguments}")
+    process = subprocess.run(arguments, env=new_environment)
+
+    if process.returncode != 0:
+        logger.warning("IPP backend exited with non-zero return code")
+        exit(process.returncode)
+
+    exit(0)
+finally:
+    logger.debug(f"Delete temporary spool file {destination_spool.absolute().as_posix()}")
+    destination_spool.unlink()

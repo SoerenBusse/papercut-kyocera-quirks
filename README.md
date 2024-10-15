@@ -4,22 +4,6 @@ Background is a broken and very slow postscript stack of the Kyocera printers, w
 
 Documentation of the bugs and challenges is in progress.
 
-## Installation
-```
-# Clone repository
-git clone https://github.com/SoerenBusse/papercut-kyocera-quirks.git
-
-# Asumming you've PaperCut installed to /home/papercut
-mkdir /home/papercut/papercut-kyocera-quirks
-
-# Copy files
-cp papercut-kyocera-quirks/cups/filter/pdftoquirks.py /usr/lib/cups/filter/pdftoquirks
-chmod +x /usr/lib/cups/filter/pdftoquirks
-
-cp papercut-kyocera-quirks/cups/redirect/quirksredirect.py /home/papercut/papercut-kyocera-quirks/quirksredirect
-chmod +x /home/papercut/papercut-kyocera-quirks/quirksredirect
-```
-
 ### Setup
 Configuring the redirect command inside `print-provider.conf`
 ```

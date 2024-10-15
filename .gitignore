@@ -2,6 +2,7 @@
 .venv
 *.pdf
 *.sh
+!install.sh
 result
 .idea
 cups/redirect/logs
